@@ -58,14 +58,15 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String       @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?      @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    OwnedBooks    OwnedBooks[]
 }
 
 model VerificationToken {
@@ -74,4 +75,31 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Book {
+    id         Int          @id @default(autoincrement())
+    title      String
+    author     String
+    isbn       String       @unique
+    completed  Boolean      @default(false)
+    purchased  Boolean      @default(true)
+    startedAt  DateTime?
+    finishedAt DateTime?
+    OwnedBooks OwnedBooks[]
+}
+
+model OwnedBooks {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    bookId Int
+    book   Book @relation(fields: [bookId], references: [id])
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    @@index([bookId])
+    @@index([userId])
 }
