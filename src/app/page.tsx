@@ -5,6 +5,9 @@ import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
+import type { Book } from "@prisma/client";
+import AddBook from "./_components/add-book";
+
 export default async function Home() {
   noStore();
   const hello = await api.post.hello.query({ text: "from tRPC" });
@@ -34,11 +37,58 @@ export default async function Home() {
           </div>
         </div>
 
-        <CrudShowcase />
+        <DisplayBooks />
+        <AddBook />
+
+        {/* <CrudShowcase /> */}
       </div>
     </main>
   );
 }
+
+async function DisplayBooks() {
+  const session = await getServerAuthSession();
+  if (!session?.user) return null;
+
+  const books: Book[] = await api.books.findAll.query();
+
+  if (!books) return <div>No books in your library</div>;
+
+  return (
+    <div className="w-full max-w-xs">
+      <h1 className="flex flex-row justify-center">Books</h1>
+      {books.map((book: Book) => (
+        <div key={book.id} className="flex flex-row justify-center">
+          <p>{book.title}</p>
+          <p>{book.author}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// async function AddBook() {
+//   const session = await getServerAuthSession();
+//   if (!session?.user) return null;
+
+//   const testBook: NewBook = {
+//     title: "test",
+//     author: "bulby",
+//     isbn: "1234567891",
+//   };
+
+//   // /const addNewBook: Book = await api.books.create.mutate(testBook);
+
+//   return (
+//     <div className="w-full max-w-xs">
+//       <div className="flex flex-row justify-center">
+//         <button onClick={() => addNewBook}>
+//           <p>Add a book</p>
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
 
 async function CrudShowcase() {
   const session = await getServerAuthSession();

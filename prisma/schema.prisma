@@ -77,18 +77,6 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Book {
-    id         Int          @id @default(autoincrement())
-    title      String
-    author     String
-    isbn       String       @unique
-    completed  Boolean      @default(false)
-    purchased  Boolean      @default(true)
-    startedAt  DateTime?
-    finishedAt DateTime?
-    OwnedBooks OwnedBooks[]
-}
-
 model OwnedBooks {
     id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
@@ -100,6 +88,19 @@ model OwnedBooks {
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
+    @@unique([bookId, userId]) // Ensuring a unique combination of book and user
     @@index([bookId])
     @@index([userId])
+}
+
+model Book {
+    id         Int          @id @default(autoincrement())
+    title      String
+    author     String
+    isbn       String       @unique
+    completed  Boolean      @default(false)
+    purchased  Boolean      @default(true)
+    startedAt  DateTime?
+    finishedAt DateTime?
+    owners     OwnedBooks[] // Renamed to 'owners' for clarity
 }
