@@ -1,12 +1,11 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-import type { Book } from "@prisma/client";
 import AddBook from "./_components/add-book";
+import { DisplayBooks } from "./_components/display-books";
 
 export default async function Home() {
   noStore();
@@ -36,75 +35,9 @@ export default async function Home() {
             </Link>
           </div>
         </div>
-
-        <DisplayBooks />
         <AddBook />
-
-        {/* <CrudShowcase /> */}
+        <DisplayBooks />
       </div>
     </main>
-  );
-}
-
-async function DisplayBooks() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
-
-  const books: Book[] = await api.books.findAll.query();
-
-  if (!books) return <div>No books in your library</div>;
-
-  return (
-    <div className="w-full max-w-xs">
-      <h1 className="flex flex-row justify-center">Books</h1>
-      {books.map((book: Book) => (
-        <div key={book.id} className="flex flex-row justify-center">
-          <p>{book.title}</p>
-          <p>{book.author}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// async function AddBook() {
-//   const session = await getServerAuthSession();
-//   if (!session?.user) return null;
-
-//   const testBook: NewBook = {
-//     title: "test",
-//     author: "bulby",
-//     isbn: "1234567891",
-//   };
-
-//   // /const addNewBook: Book = await api.books.create.mutate(testBook);
-
-//   return (
-//     <div className="w-full max-w-xs">
-//       <div className="flex flex-row justify-center">
-//         <button onClick={() => addNewBook}>
-//           <p>Add a book</p>
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-async function CrudShowcase() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
-
-  const latestPost = await api.post.getLatest.query();
-
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
-    </div>
   );
 }
