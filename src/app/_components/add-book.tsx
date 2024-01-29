@@ -23,33 +23,36 @@ export default function AddBook() {
   };
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="flex w-full flex-col">
       <div className="flex flex-row justify-center">
         <input
           type="text"
           name="title"
           value={newBook.title}
           onChange={handleInputChange}
-          className="text-red-500"
+          className="m-1 w-60 p-2 text-black"
+          placeholder="Title"
         />
         <input
           type="text"
           name="author"
           value={newBook.author}
           onChange={handleInputChange}
-          className="text-red-500"
+          className="m-1 w-60 p-2 text-black"
+          placeholder="Author"
         />
-        <button
-          onClick={async () =>
-            await addBook({ book: newBook }).then(() => {
-              setNewBook({ title: "", author: "" });
-            })
-          }
-          disabled={isLoading}
-        >
-          <p>Add a book</p>
-        </button>
       </div>
+      <button
+        className="mt-5 self-center rounded-md bg-slate-300 p-2 px-5 text-black"
+        onClick={async () =>
+          await addBook({ book: newBook }).then(() => {
+            setNewBook({ title: "", author: "" });
+          })
+        }
+        disabled={isLoading}
+      >
+        <p>Add a book</p>
+      </button>
     </div>
   );
 }
