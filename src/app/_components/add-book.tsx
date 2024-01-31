@@ -22,6 +22,7 @@ export default function AddBook() {
     setNewBook((prev) => ({ ...prev, [name]: value }));
   };
 
+  // TODO: Potentially validate input before sending to the server
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-row justify-center">

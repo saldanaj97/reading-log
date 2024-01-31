@@ -9,7 +9,23 @@ export default async function handleAddBookReq({ book }: { book: NewBook }) {
   if (!session?.user) return null;
 
   try {
-    const addedBook = await api.books.create.mutate(book);
+    const bookInfo = await api.books.fetchBookInfo.query({
+      title: book.title,
+      author: book.author,
+    });
+
+    if (!bookInfo) {
+      throw new Error(
+        "No book info found for that title and author. Please try again.",
+      );
+    }
+
+    const newBookWithCorrectedInfo: NewBook = {
+      title: bookInfo.volumeInfo.title,
+      author: bookInfo.volumeInfo.authors[0]!,
+    };
+
+    const addedBook = await api.books.create.mutate(newBookWithCorrectedInfo);
     return addedBook;
   } catch (error) {
     console.error("Error adding book:", error);
