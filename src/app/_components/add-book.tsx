@@ -7,6 +7,8 @@ export default function AddBook() {
   const [newBook, setNewBook] = useState({
     title: "",
     author: "",
+    id: "",
+    etag: "",
   });
 
   const { addBook, isLoading, isDenied } = useAddBook();
@@ -22,7 +24,6 @@ export default function AddBook() {
     setNewBook((prev) => ({ ...prev, [name]: value }));
   };
 
-  // TODO: Potentially validate input before sending to the server
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-row justify-center">
@@ -47,7 +48,7 @@ export default function AddBook() {
         className="mt-5 self-center rounded-md bg-slate-300 p-2 px-5 text-black"
         onClick={async () =>
           await addBook({ book: newBook }).then(() => {
-            setNewBook({ title: "", author: "" });
+            setNewBook({ title: "", author: "", id: "", etag: "" });
           })
         }
         disabled={isLoading}

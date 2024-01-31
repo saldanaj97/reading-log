@@ -15,14 +15,14 @@ export default async function handleAddBookReq({ book }: { book: NewBook }) {
     });
 
     if (!bookInfo) {
-      throw new Error(
-        "No book info found for that title and author. Please try again.",
-      );
+      alert("No book info found for that title and author. Please try again.");
     }
 
     const newBookWithCorrectedInfo: NewBook = {
       title: bookInfo.volumeInfo.title,
       author: bookInfo.volumeInfo.authors[0]!,
+      id: bookInfo.id,
+      etag: bookInfo.etag,
     };
 
     const addedBook = await api.books.create.mutate(newBookWithCorrectedInfo);

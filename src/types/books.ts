@@ -12,6 +12,8 @@ type Book = {
 type NewBook = {
   title: string;
   author: string;
+  id: string;
+  etag: string;
 };
 
 type OwnedBooks = {
