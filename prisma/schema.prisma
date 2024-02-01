@@ -82,8 +82,8 @@ model OwnedBooks {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    bookId Int
-    book   Book @relation(fields: [bookId], references: [id])
+    bookId String
+    book   Book   @relation(fields: [bookId], references: [id])
 
     userId String
     user   User   @relation(fields: [userId], references: [id])
@@ -94,13 +94,16 @@ model OwnedBooks {
 }
 
 model Book {
-    id         Int          @id @default(autoincrement())
-    title      String
-    author     String
-    isbn       String       @unique
-    completed  Boolean      @default(false)
-    purchased  Boolean      @default(true)
-    startedAt  DateTime?
-    finishedAt DateTime?
-    owners     OwnedBooks[] // Renamed to 'owners' for clarity
+    id          String       @id
+    title       String
+    author      String
+    description String?      @db.Text
+    isbn        String       @unique
+    thumbnail   String?      @db.Text
+    completed   Boolean      @default(false)
+    purchased   Boolean      @default(false)
+    startedAt   DateTime?
+    finishedAt  DateTime?
+    createdAt   DateTime     @default(now())
+    owners      OwnedBooks[] // Renamed to 'owners' for clarity
 }

@@ -5,6 +5,17 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      // Google Books API
+      {
+        protocol: "http",
+        hostname: "books.google.com",
+        port: "",
+      },
+    ],
+  },
+};
 
 export default config;
