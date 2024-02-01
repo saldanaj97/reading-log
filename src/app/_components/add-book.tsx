@@ -9,6 +9,8 @@ export default function AddBook() {
     author: "",
     id: "",
     etag: "",
+    thumbnail: "",
+    selfLink: "",
   });
 
   const { addBook, isLoading, isDenied } = useAddBook();
@@ -48,7 +50,14 @@ export default function AddBook() {
         className="mt-5 self-center rounded-md bg-slate-300 p-2 px-5 text-black"
         onClick={async () =>
           await addBook({ book: newBook }).then(() => {
-            setNewBook({ title: "", author: "", id: "", etag: "" });
+            setNewBook({
+              title: "",
+              author: "",
+              id: "",
+              etag: "",
+              thumbnail: "",
+              selfLink: "",
+            });
           })
         }
         disabled={isLoading}

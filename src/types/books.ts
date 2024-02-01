@@ -1,12 +1,15 @@
 type Book = {
-  id: number;
+  id: string;
   title: string;
   author: string;
+  description: string | undefined;
   isbn: string;
+  thumbnail: string | undefined;
   completed: boolean;
   purchased: boolean;
   startedAt: Date | undefined;
   finishedAt: Date | undefined;
+  createdAt: Date;
 };
 
 type NewBook = {
@@ -14,10 +17,12 @@ type NewBook = {
   author: string;
   id: string;
   etag: string;
+  thumbnail: string;
+  selfLink: string;
 };
 
 type OwnedBooks = {
-  id: number;
+  id: string;
   userId: number;
   bookId: number;
   createdAt: Date;
