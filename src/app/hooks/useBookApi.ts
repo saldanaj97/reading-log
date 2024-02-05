@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { type NewBook } from "~/types/books";
 import handleAddBookReq from "../utils/handleAddBookRequest";
+import handleDeleteBookReq from "../utils/handleDeleteBookRequest";
 
-export default function useAddBook() {
+export default function useBookApi() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const [isDenied, setIsDenied] = useState(false);
 
   const addBook = async ({ book }: { book: NewBook }) => {
     try {
-      // TODO: Change this to a toast or something similar for better UX
       setIsLoading(true);
       await handleAddBookReq({ book });
       setIsAdded(true);
-      console.log("New book added! " + book.title + " by " + book.author);
     } catch (error) {
       setIsDenied(true);
     } finally {
@@ -21,5 +21,17 @@ export default function useAddBook() {
     }
   };
 
-  return { addBook, isLoading, isAdded, isDenied };
+  const deleteBook = async ({ id }: { id: string }) => {
+    try {
+      setIsLoading(true);
+      await handleDeleteBookReq(id);
+      setIsDeleted(false);
+    } catch (error) {
+      setIsDenied(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { addBook, isLoading, isAdded, isDenied, deleteBook, isDeleted };
 }

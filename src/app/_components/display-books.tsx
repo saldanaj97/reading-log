@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { type Book } from "~/types/books";
+import DeleteBook from "./delete-button";
 
 export async function DisplayBooks() {
   const session = await getServerAuthSession();
@@ -19,12 +20,10 @@ export async function DisplayBooks() {
       <div className="flex w-full flex-row flex-wrap justify-center overflow-auto">
         {books.map((book: Book) => (
           <div key={book.id} className="m-1 flex flex-col p-2">
-            {!book.thumbnail ||
-            book.thumbnail === null ||
-            book.thumbnail === undefined ? (
+            {!book.thumbnail || book.thumbnail === null ? (
               <div className="flex flex-row justify-center">
                 <div className="h-40 w-28 bg-slate-300 object-cover">
-                  <p className="aling-center text-center text-black">
+                  <p className="align-center text-center text-black">
                     {book.title}
                   </p>
                 </div>
@@ -46,6 +45,7 @@ export async function DisplayBooks() {
             <p className="max-w-[100px] overflow-hidden overflow-ellipsis whitespace-nowrap text-center">
               {book.author}
             </p>
+            <DeleteBook id={book.id} />
           </div>
         ))}
       </div>

@@ -1,11 +1,12 @@
 import { z } from "zod";
+import { ErrorMessage } from "~/app/utils/handleErrorMessage";
 import { env } from "~/env";
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import type { BookInfo, NewBook } from "~/types/books";
+import type { BookInfo, DeletedBook, NewBook } from "~/types/books";
 
 // Ensure the API key is present
 if (!env.GOOGLE_BOOKS_API_KEY) {
@@ -22,12 +23,16 @@ export const booksRouter = createTRPCRouter({
   findOneBook: publicProcedure
     .input(z.object({ title: z.string().min(1), author: z.string().min(1) }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.book.findFirst({
-        where: {
-          title: input.title,
-          author: input.author,
-        },
-      });
+      try {
+        return (await ctx.db.book.findFirst({
+          where: {
+            title: input.title,
+            author: input.author,
+          },
+        })) as BookInfo | null;
+      } catch (error: unknown) {
+        ErrorMessage(error, "finding one book(server)");
+      }
     }),
 
   // Query to fetch book information from the Google Books API
@@ -52,28 +57,48 @@ export const booksRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const newBook = (await ctx.db.book.create({
-        data: {
-          id: input.id,
-          title: input.title,
-          author: input.author,
-          isbn: generateRandomISBN(),
-          purchased: true,
-          thumbnail: input.thumbnail,
-        },
-      })) as NewBook;
+      try {
+        const newBook = (await ctx.db.book.create({
+          data: {
+            id: input.id,
+            title: input.title,
+            author: input.author,
+            isbn: generateRandomISBN(),
+            purchased: true,
+            thumbnail: input.thumbnail,
+          },
+        })) as NewBook;
 
-      await ctx.db.ownedBooks.create({
-        data: {
-          userId: ctx.session.user.id,
-          bookId: newBook.id,
-        },
-      });
+        await ctx.db.ownedBooks.create({
+          data: {
+            userId: ctx.session.user.id,
+            bookId: newBook.id,
+          },
+        });
 
-      return newBook;
+        return newBook;
+      } catch (error: unknown) {
+        ErrorMessage(error, "adding a new book(server)");
+      }
+    }),
+
+  // Query to delete a book from the users owned books
+  delete: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const bookDeleted = (await ctx.db.book.delete({
+          where: { id: input.id },
+        })) as DeletedBook;
+
+        return bookDeleted;
+      } catch (error: unknown) {
+        ErrorMessage(error, "deleting a book from inventory(server)");
+      }
     }),
 });
 
+// Helper function to fetch book information from the Google Books API
 async function fetchBookInfoFromGoogleBooks({
   title,
   author,
@@ -110,6 +135,7 @@ async function fetchBookInfoFromGoogleBooks({
     throw error;
   }
 }
+
 // Helper function to generate a random ISBN number
 function generateRandomISBN() {
   return Math.floor(100000000 + Math.random() * 900000000).toString();

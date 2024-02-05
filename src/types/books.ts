@@ -21,6 +21,12 @@ type NewBook = {
   selfLink: string;
 };
 
+type DeletedBook = {
+  id: string;
+  title: string;
+  author: string;
+};
+
 type OwnedBooks = {
   id: string;
   userId: number;
@@ -102,4 +108,11 @@ type GoogleBooksApiResponse = {
   selfLink: string;
 };
 
-export type { Book, BookInfo, GoogleBooksApiResponse, NewBook, OwnedBooks };
+export type {
+  Book,
+  BookInfo,
+  DeletedBook,
+  GoogleBooksApiResponse,
+  NewBook,
+  OwnedBooks,
+};

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import useAddBook from "~/app/hooks/useAddBook";
+import useBookApi from "~/app/hooks/useBookApi";
 
 export default function AddBook() {
   const [newBook, setNewBook] = useState({
@@ -13,7 +13,7 @@ export default function AddBook() {
     selfLink: "",
   });
 
-  const { addBook, isLoading, isDenied } = useAddBook();
+  const { addBook, isLoading, isDenied } = useBookApi();
 
   if (isDenied) {
     alert("Failed to add book. Please try again.");
