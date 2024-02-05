@@ -14,19 +14,6 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-    @@index([createdById])
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -65,7 +52,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
     OwnedBooks    OwnedBooks[]
 }
 
@@ -83,12 +69,12 @@ model OwnedBooks {
     updatedAt DateTime @updatedAt
 
     bookId String
-    book   Book   @relation(fields: [bookId], references: [id])
+    book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
 
     userId String
     user   User   @relation(fields: [userId], references: [id])
 
-    @@unique([bookId, userId]) // Ensuring a unique combination of book and user
+    @@unique([bookId, userId])
     @@index([bookId])
     @@index([userId])
 }
@@ -105,5 +91,5 @@ model Book {
     startedAt   DateTime?
     finishedAt  DateTime?
     createdAt   DateTime     @default(now())
-    owners      OwnedBooks[] // Renamed to 'owners' for clarity
+    owners      OwnedBooks[]
 }
