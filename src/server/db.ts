@@ -13,8 +13,24 @@ const client = new Client({ url: env.DATABASE_URL });
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log:
-      env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+    log: [
+      {
+        emit: "event",
+        level: "query",
+      },
+      {
+        emit: "stdout",
+        level: "error",
+      },
+      {
+        emit: "stdout",
+        level: "info",
+      },
+      {
+        emit: "stdout",
+        level: "warn",
+      },
+    ],
     adapter: new PrismaPlanetScale(client),
   });
 

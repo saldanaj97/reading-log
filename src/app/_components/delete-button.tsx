@@ -16,6 +16,7 @@ export default function DeleteBook({ id }: { id: string }) {
           await deleteBook({ id: id });
         }}
         disabled={isLoading}
+        className="w-full rounded-md p-2 text-center text-red-500"
       >
         x
       </button>
