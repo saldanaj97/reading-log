@@ -26,9 +26,35 @@ export default function AddBook() {
     setNewBook((prev) => ({ ...prev, [name]: value }));
   };
 
+  // TODO: Change the onlick to a become a modal that will then allow the user to add a book
   return (
-    <div className="flex w-full flex-col">
-      <div className="flex flex-row justify-center">
+    <div className="flex flex-col">
+      <div className="m-1 flex cursor-pointer flex-col p-2">
+        <button
+          className="flex h-40 w-28 items-center justify-center bg-slate-500/50"
+          onClick={async () =>
+            await addBook({ book: newBook }).then(() => {
+              setNewBook({
+                title: "",
+                author: "",
+                id: "",
+                etag: "",
+                thumbnail: "",
+                selfLink: "",
+              });
+            })
+          }
+          disabled={isLoading}
+        >
+          <p className="text-center text-4xl text-black">+</p>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+{
+  /* <div className="flex flex-row justify-center">
         <input
           type="text"
           name="title"
@@ -45,25 +71,5 @@ export default function AddBook() {
           className="m-1 w-60 p-2 text-black"
           placeholder="Author"
         />
-      </div>
-      <button
-        className="mt-5 self-center rounded-md bg-slate-300 p-2 px-5 text-black"
-        onClick={async () =>
-          await addBook({ book: newBook }).then(() => {
-            setNewBook({
-              title: "",
-              author: "",
-              id: "",
-              etag: "",
-              thumbnail: "",
-              selfLink: "",
-            });
-          })
-        }
-        disabled={isLoading}
-      >
-        <p>Add a book</p>
-      </button>
-    </div>
-  );
+      </div> */
 }

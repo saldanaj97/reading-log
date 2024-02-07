@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { type Book } from "~/types/books";
+import AddBook from "./add-book";
 import DeleteBook from "./delete-button";
 
 export async function DisplayBooks() {
@@ -22,7 +23,7 @@ export async function DisplayBooks() {
           <div key={book.id} className="m-1 flex flex-col p-2">
             {!book.thumbnail || book.thumbnail === null ? (
               <div className="flex flex-row justify-center">
-                <div className="h-40 w-28 bg-slate-300 object-cover">
+                <div className=" bg-slate-300 object-cover">
                   <p className="align-center text-center text-black">
                     {book.title}
                   </p>
@@ -48,6 +49,7 @@ export async function DisplayBooks() {
             <DeleteBook id={book.id} />
           </div>
         ))}
+        <AddBook />
       </div>
     </div>
   );
