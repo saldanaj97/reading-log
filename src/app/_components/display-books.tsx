@@ -9,7 +9,7 @@ export async function DisplayBooks() {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
 
-  const books = (await api.books.findAll.query()) as unknown as Book[] | null;
+  const books = (await api.books.fetchAll.query()) as unknown as Book[] | null;
 
   if (!books) return <div>No books in your library</div>;
 

@@ -6,8 +6,6 @@ export async function UserSignedInMessage() {
   const hello = await api.post.hello.query({ text: "from tRPC" });
   const session = await getServerAuthSession();
 
-  if (!session?.user) return null;
-
   return (
     <div className="flex flex-col items-center gap-2">
       <p className="text-2xl text-white">

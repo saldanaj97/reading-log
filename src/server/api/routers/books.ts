@@ -15,8 +15,17 @@ if (!env.GOOGLE_BOOKS_API_KEY) {
 
 export const booksRouter = createTRPCRouter({
   // Query to find all books in the database
-  findAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.book.findMany() as Promise<BookInfo[]>;
+  fetchAll: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const books = await ctx.db.book.findMany({
+        where: {
+          owners: { every: { userId: ctx.session.user.id } },
+        },
+      });
+      return books as BookInfo[] | null;
+    } catch (error: unknown) {
+      ErrorMessage(error, "fetching all books(server)");
+    }
   }),
 
   // Query to find a single book based on title and author
