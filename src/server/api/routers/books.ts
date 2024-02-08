@@ -121,8 +121,6 @@ async function fetchBookInfoFromGoogleBooks({
     if (!response.ok)
       throw new Error("Failed to fetch data from Google Books API");
 
-    // we know this is going to be a list of items of there is no error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = (await response.json()) as {
       items: { selfLink: string }[];
     };
