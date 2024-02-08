@@ -6,7 +6,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import type { BookInfo, DeletedBook, NewBook } from "~/types/books";
+import type { Book, BookInfo, DeletedBook } from "~/types/books";
 
 // Ensure the API key is present
 if (!env.GOOGLE_BOOKS_API_KEY) {
@@ -22,7 +22,7 @@ export const booksRouter = createTRPCRouter({
           owners: { every: { userId: ctx.session.user.id } },
         },
       });
-      return books as BookInfo[] | null;
+      return books as Book[] | null;
     } catch (error: unknown) {
       ErrorMessage(error, "fetching all books(server)");
     }
@@ -76,7 +76,7 @@ export const booksRouter = createTRPCRouter({
             purchased: true,
             thumbnail: input.thumbnail,
           },
-        })) as NewBook;
+        })) as Book;
 
         await ctx.db.ownedBooks.create({
           data: {
