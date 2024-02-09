@@ -15,6 +15,10 @@ export default {
       },
     },
   },
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      addCommonColors: true,
+    }),
+  ],
   darkMode: "class",
 } satisfies Config;

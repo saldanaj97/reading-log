@@ -2,6 +2,7 @@
 
 import {
   Button,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -37,7 +38,7 @@ export default function AddBook() {
   };
 
   return (
-    <div className="z-50 m-1 flex h-full cursor-pointer items-center justify-center p-2">
+    <div className="m-1 flex h-full cursor-pointer items-center justify-center p-2">
       <Button
         onPress={onOpen}
         disabled={isLoading}
@@ -50,6 +51,8 @@ export default function AddBook() {
         onOpenChange={onOpenChange}
         placement={"center"}
         backdrop={"blur"}
+        className="w-full bg-background"
+        size="lg"
       >
         <ModalContent>
           {(onClose) => (
@@ -59,21 +62,23 @@ export default function AddBook() {
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-row justify-center">
-                  <input
+                  <Input
                     type="text"
                     name="title"
                     value={newBook.title}
                     onChange={handleInputChange}
                     className="m-1 w-60 p-2 text-black"
                     placeholder="Title"
+                    variant="flat"
                   />
-                  <input
+                  <Input
                     type="text"
                     name="author"
                     value={newBook.author}
                     onChange={handleInputChange}
                     className="m-1 w-60 p-2 text-black"
                     placeholder="Author"
+                    variant="flat"
                   />
                 </div>
               </ModalBody>
