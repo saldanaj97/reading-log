@@ -50,7 +50,7 @@ export default function AddBook() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         placement={"center"}
-        backdrop={"blur"}
+        backdrop={"opaque"}
         className="w-full bg-background"
         size="lg"
       >
