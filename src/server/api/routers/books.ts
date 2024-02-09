@@ -63,6 +63,7 @@ export const booksRouter = createTRPCRouter({
         title: z.string().min(1),
         author: z.string().min(1),
         thumbnail: z.string().min(1),
+        isbn: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -72,7 +73,7 @@ export const booksRouter = createTRPCRouter({
             id: input.id,
             title: input.title,
             author: input.author,
-            isbn: generateRandomISBN(),
+            isbn: input.isbn,
             purchased: true,
             thumbnail: input.thumbnail,
           },

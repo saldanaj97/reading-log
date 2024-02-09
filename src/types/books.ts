@@ -3,7 +3,7 @@ type Book = {
   title: string;
   author: string;
   description: string | undefined;
-  isbn: string;
+  isbn: string | undefined;
   thumbnail: string | undefined;
   completed: boolean;
   purchased: boolean;
@@ -46,7 +46,7 @@ type BookInfo = {
     publisher: string;
     publishedDate: string;
     description: string;
-    industryIdentifiers: { type: string; identifier: string }[][];
+    industryIdentifiers: { type: string; identifier: string }[];
     readingModes: { text: boolean; image: boolean };
     pageCount: number;
     printedPageCount: number;

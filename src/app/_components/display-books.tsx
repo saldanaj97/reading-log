@@ -14,7 +14,7 @@ export async function DisplayBooks() {
   if (!books) return <div>No books in your library</div>;
 
   return (
-    <div className="">
+    <>
       <h1 className="flex flex-row justify-center text-4xl font-bold">
         Books Owned
       </h1>
@@ -51,6 +51,6 @@ export async function DisplayBooks() {
         ))}
         <AddBook />
       </div>
-    </div>
+    </>
   );
 }

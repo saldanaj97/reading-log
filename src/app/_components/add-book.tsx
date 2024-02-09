@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+
 import { useState } from "react";
 import useBookApi from "~/app/hooks/useBookApi";
 
@@ -12,7 +22,7 @@ export default function AddBook() {
     thumbnail: "",
     selfLink: "",
   });
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { addBook, isLoading, isDenied } = useBookApi();
 
   if (isDenied) {
@@ -26,50 +36,74 @@ export default function AddBook() {
     setNewBook((prev) => ({ ...prev, [name]: value }));
   };
 
-  // TODO: Change the onlick to a become a modal that will then allow the user to add a book
   return (
-    <div className="flex flex-col">
-      <div className="m-1 flex cursor-pointer flex-col p-2">
-        <button
-          className="flex h-40 w-28 items-center justify-center bg-slate-500/50"
-          onClick={async () =>
-            await addBook({ book: newBook }).then(() => {
-              setNewBook({
-                title: "",
-                author: "",
-                id: "",
-                etag: "",
-                thumbnail: "",
-                selfLink: "",
-              });
-            })
-          }
-          disabled={isLoading}
-        >
-          <p className="text-center text-4xl text-black">+</p>
-        </button>
-      </div>
+    <div className="z-50 m-1 flex h-full cursor-pointer items-center justify-center p-2">
+      <Button
+        onPress={onOpen}
+        disabled={isLoading}
+        className="flex h-40 w-28 items-center justify-center bg-slate-500/50"
+      >
+        +
+      </Button>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement={"center"}
+        backdrop={"blur"}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Add a new book
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex flex-row justify-center">
+                  <input
+                    type="text"
+                    name="title"
+                    value={newBook.title}
+                    onChange={handleInputChange}
+                    className="m-1 w-60 p-2 text-black"
+                    placeholder="Title"
+                  />
+                  <input
+                    type="text"
+                    name="author"
+                    value={newBook.author}
+                    onChange={handleInputChange}
+                    className="m-1 w-60 p-2 text-black"
+                    placeholder="Author"
+                  />
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={async () => {
+                    await addBook({ book: newBook }).then(() => {
+                      setNewBook({
+                        title: "",
+                        author: "",
+                        id: "",
+                        etag: "",
+                        thumbnail: "",
+                        selfLink: "",
+                      });
+                    });
+                    onClose();
+                  }}
+                >
+                  Add
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
-}
-
-{
-  /* <div className="flex flex-row justify-center">
-        <input
-          type="text"
-          name="title"
-          value={newBook.title}
-          onChange={handleInputChange}
-          className="m-1 w-60 p-2 text-black"
-          placeholder="Title"
-        />
-        <input
-          type="text"
-          name="author"
-          value={newBook.author}
-          onChange={handleInputChange}
-          className="m-1 w-60 p-2 text-black"
-          placeholder="Author"
-        />
-      </div> */
 }

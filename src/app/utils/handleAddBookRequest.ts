@@ -23,6 +23,10 @@ export default async function handleAddBookReq({ book }: { book: NewBook }) {
       title: bookInfo.volumeInfo.title,
       author: bookInfo.volumeInfo.authors[0]!,
       thumbnail: bookInfo.volumeInfo.imageLinks.thumbnail,
+      isbn:
+        bookInfo.volumeInfo.industryIdentifiers[0]?.identifier ??
+        bookInfo.volumeInfo.industryIdentifiers[1]?.identifier ??
+        "",
     });
 
     return addedBook;
