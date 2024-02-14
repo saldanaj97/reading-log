@@ -1,20 +1,35 @@
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
 export async function UserSignedInMessage() {
-  const hello = await api.post.hello.query({ text: "from tRPC" });
   const session = await getServerAuthSession();
+
+  // Get users timezone and display a message based on the time of day
+  function TimeOfDayMessage() {
+    const date = new Date();
+    const hours = date.getHours();
+    let message = "";
+    if (hours < 12) {
+      message = "Good morning, ";
+    } else if (hours < 18) {
+      message = "Good afternoon, ";
+    } else {
+      message = "Good evening, ";
+    }
+
+    return <>{message}</>;
+  }
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <p className="text-2xl text-white">
-        {hello ? hello.greeting : "Loading tRPC query..."}
-      </p>
-
       <div className="flex flex-col items-center justify-center gap-4">
         <p className="text-center text-2xl text-white">
-          {session && <span>Logged in as {session.user?.name}</span>}
+          {session && (
+            <span>
+              <TimeOfDayMessage />
+              {session.user?.name}
+            </span>
+          )}
         </p>
         <Link
           href={session ? "/api/auth/signout" : "/api/auth/signin"}
