@@ -38,11 +38,11 @@ export default function AddBook() {
   };
 
   return (
-    <div className="m-1 flex h-full cursor-pointer items-center justify-center p-2">
+    <div className="my-4 flex h-full cursor-pointer flex-col items-center justify-center p-2">
       <Button
         onPress={onOpen}
         disabled={isLoading}
-        className="flex h-40 w-28 items-center justify-center bg-slate-500/50"
+        className="flex h-[160px] w-[115px] items-center justify-center bg-slate-500/50"
       >
         +
       </Button>

@@ -31,8 +31,9 @@ export default function BookModal({ books }: { books: Book[] }) {
                 <Image
                   src={book.thumbnail}
                   alt={book.title}
-                  layout={"fill"}
-                  objectFit={"cover"}
+                  fill={true}
+                  className={"object-cover"}
+                  sizes={"max-width: 115px, max-height: 160px"}
                 />
               ) : (
                 <p>{book.title}</p>
